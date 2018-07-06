@@ -158,7 +158,7 @@ def main():
 				else:
 					response = input(" Host seems down. Is not replying the ping requests.\n Do you want to analyze the host anyway? (y/N): ").upper()
 					if(response=="Y" or response=="YES"):
-						portsLoop(target_ip,start_port,end_port)
+						portsLoop(target_ip,start_port,end_port,showClosed)
 
 				t1_stop = time.perf_counter()
 				print(Colors.WARNING+"\n [!] "+str(open_ports)+" open port/s, "+str(filtered_ports)+" filtered port/s, "+str(closed_ports)+" closed port/s"+Colors.ENDC)
