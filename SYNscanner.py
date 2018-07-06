@@ -3,6 +3,7 @@
 #coded by: @adrianfa5
 
 from random import randint
+from pprint import pprint
 import logging,time,sys,os,socket
 logging.getLogger("scapy.runtime").setLevel(logging.ERROR)
 from scapy.all import ARP,IP,TCP,UDP,ICMP,DNS,DNSQR,send,sr1
@@ -63,12 +64,16 @@ def icmp_request(host):
          return False
 	
 def dns_request(domain_name):
+	host = ""
 	try:
-		reply = sr1(IP(dst="8.8.8.8")/UDP(dport=53)/DNS(rd=1,qd=DNSQR(qname=domain_name)),verbose=0)
-		try:
-			host = reply.an[1].rdata
-		except:
-			host = reply.an.rdata
+		reply = sr1(IP(dst="8.8.8.8")/UDP(dport=53)/DNS(rd=1,qd=DNSQR(qname=domain_name,qtype="A")),verbose=0)
+		i = 0
+		exit = False
+		while(i<reply.ancount and not exit):
+			if(reply.an[i].type == 1):
+				host = reply.an[i].rdata
+				exit = True
+			i+=1
 	except:
 		print("Error resolving the domain name")
 		sys.exit(1)
